@@ -1,1 +1,13 @@
 pip3 install fastapi "uvicorn[standard]"
+
+dev tools -> network -> reload
+
+head, connect, trace, patch...
+
+async before function definitions, await before function calls
+
+use async before in all functions
+
+pydantic performs data validation
+
+check model.py at this commit
