@@ -10,10 +10,6 @@ use async before in all functions
 
 pydantic performs data validation
 
-check model.py at this commit
-
-check main.py at this commit
-
 the id will change every time you run the app
 
 json viewer browser extension
@@ -22,4 +18,4 @@ to have fixed ids, you need to use UUID("id_here")
 
 /api/v1/users is the endpoint
 
-
+from our browser, we can only perform get requests, to perform post requests, we need to use a form
