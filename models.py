@@ -22,7 +22,7 @@ class User(BaseModel):
     roles: List[Role]
 
 class UpdateUser(BaseModel):
-    first_name: str
-    last_name: str
+    first_name: Optional[str]
+    last_name: Optional[str]
     middle_name: Optional[str]
-    roles: List[Role]
+    roles: Optional[List[Role]]
