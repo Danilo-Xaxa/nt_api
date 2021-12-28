@@ -19,3 +19,12 @@ to have fixed ids, you need to use UUID("id_here")
 /api/v1/users is the endpoint
 
 from our browser, we can only perform get requests, to perform post requests, we need to use a form
+
+install a rest client vs code extension (rest client or thunder client). you can use it to perform http requests
+
+docs page are provided by swagger
+
+redoc is a tool to generate docs. it is not interactive
+
+you can have two or more endpoints with the same name, but different http methods. you can also have two or more functions with the same name, but different parameters
+
