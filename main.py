@@ -1,25 +1,22 @@
 from fastapi import FastAPI, HTTPException
 from typing import List
-from uuid import UUID
-from models import Gender, Role, User, UpdateUser
+from models import Contato, ContatoUpdate
 
 
 app = FastAPI()
 
-db: List[User] = [
-    User(
-        id=UUID("a8279a19-6004-4172-833c-9b1182297d88"), 
-        first_name="Jamila",
-        last_name="Ahmed",
-        gender=Gender.female,
-        roles=[Role.student]
+db: List[Contato] = [
+    Contato(
+        email="icaroxaxa01@gmail.com",
+        telefone="81 99999-9999",
+        aniversario="04/07",
+        peso=50.0
     ),
-    User(
-        id=UUID("281c6e82-5660-4544-9d72-337a26b3058b"), 
-        first_name="Alex",
-        last_name="Jones",
-        gender=Gender.male,
-        roles=[Role.admin, Role.user] 
+    Contato(
+        email="sullivanxaxa@gmail.com",
+        telefone="81 88888-8888",
+        aniversario="24/11",
+        peso=100.0,
     ),
 ]
 
@@ -29,43 +26,43 @@ async def root():
     return {"Mensagem": "Olá mundo!"}
 
 
-@app.get("/api/v1/users")
-async def fetch_users():
+@app.get("/api/v1/contatos")
+async def fetch_contatos():
     return db
 
 
-@app.post("/api/v1/users")
-async def register_user(user: User):
-    db.append(user)
-    return {"id": user.id}
+@app.post("/api/v1/contatos")
+async def registrar_contato(contato: Contato):
+    db.append(contato)
+    return {"email": contato.email}
 
 
-@app.delete("/api/v1/users/{user_id}")
-async def delete_user(user_id: UUID):
-    for user in db:
-        if user.id == user_id:
-            db.remove(user)
-            return {"message": f"User with ID {user_id} deleted"}
+@app.delete("/api/v1/contatos/{email_contato}")
+async def deletar_contato(email_contato: str):
+    for contato in db:
+        if contato.email == email_contato:
+            db.remove(contato)
+            return {"Mensagem": f"Contato com e-mail {email_contato} deletado com sucesso!"}
     raise HTTPException(
         status_code=404,
-        detail=f"User with ID {user_id} not found"
+        detail=f"Contato com e-mail {email_contato} não encontrado!",
      )
 
 
-@app.put("/api/v1/users/{user_id}")
-async def update_user(user_id: UUID, update_user: UpdateUser):
-    for user in db:
-        if user.id == user_id:
-            if update_user.first_name != None:
-                user.first_name = update_user.first_name
-            if update_user.last_name != None:
-                user.last_name = update_user.last_name
-            if update_user.middle_name != None:
-                user.middle_name = update_user.middle_name
-            if update_user.roles != None:
-                user.roles = update_user.roles                            
-            return user
+@app.put("/api/v1/contatos/{email_contato}")
+async def update_contato(email_contato: str, update_contato: ContatoUpdate):
+    for contato in db:
+        if contato.email == email_contato:
+            if update_contato.email != None:
+                contato.email = update_contato.email
+            if update_contato.telefone != None:
+                contato.telefone = update_contato.telefone
+            if update_contato.aniversario != None:
+                contato.aniversario = update_contato.aniversario
+            if update_contato.peso != None:
+                contato.peso = update_contato.peso                   
+            return contato
     raise HTTPException(
         status_code=404,
-        detail=f"User with ID {user_id} not found"
-     )
+        detail=f"Contato com e-mail {email_contato} não encontrado!",
+    )
