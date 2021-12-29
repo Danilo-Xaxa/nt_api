@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
+from typing import List
+from models import Contato, ContatoUpdate
 
 
 class Contato(BaseModel):
@@ -13,3 +15,18 @@ class ContatoUpdate(BaseModel):
     telefone: Optional[str]
     aniversario: Optional[str]
     peso: Optional[float]
+
+db: List[Contato] = [
+    Contato(
+        email="icaroxaxa01@gmail.com",
+        telefone="81 99999-9999",
+        aniversario="04/07",
+        peso=50.0
+    ),
+    Contato(
+        email="sullivanxaxa@gmail.com",
+        telefone="81 88888-8888",
+        aniversario="24/11",
+        peso=100.0,
+    ),
+]
