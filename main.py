@@ -53,26 +53,28 @@ async def ler_contato(api_key: str = API_KEY, contact: str = None, properties: s
 
 
 @app.post("/crm/v3/objects/contacts/{api_key}")
-async def criar_contato(api_key: str = API_KEY, contact: str = None):
-    client = hubspot.Client.create(api_key=API_KEY)
+async def criar_contato(api_key: str = API_KEY):
+    client = hubspot.Client.create(api_key=api_key)
 
     properties = {
-        "email": "exemplo@gmail.com",
-        "telefone": "81 7070-7070",
-        "niver": "2021-12-29",
-        "peso": 80.0,
+        "email": "gtrg@gmail.com",
+        "telefone": "81 7074-7011",
+        "niver": "2021-12-11",
+        "peso": 11.0  # é em float mesmo?
     }
 
     simple_public_object_input = SimplePublicObjectInput(properties=properties)
 
     try:
         api_response = client.crm.contacts.basic_api.create(simple_public_object_input=simple_public_object_input)
-        pprint(api_response)
+        return properties
 
     except ApiException as e:
         print("Exception when calling basic_api->create: %s\n" % e)
+        return HTTPException(status_code=500, detail="Erro ao criar contato")
 
 
 @app.put("/crm/v3/objects/contacts/{api_key}")
 async def atualizar_contato(api_key: str = API_KEY, contact: str = None):
+    # caso o contact (email) já exista, atualiza. caso não exista, cria com o post acima
     pass
