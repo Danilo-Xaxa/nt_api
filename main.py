@@ -38,30 +38,26 @@ async def fetch_contatos(api_key: str = API_KEY, properties: str = None, contact
 
     try:
         if properties:
-            propriedades = properties.split("-")
+            propriedades = properties.split("-")  # precisa ser vírgula?
             propriedades_originais = propriedades.copy()
-            if contact:
-                if not 'email' in propriedades:
-                    propriedades.append('email')
+            if contact and (not 'email' in propriedades):
+                propriedades.append('email')
         else:
             propriedades = ['email', 'telefone', 'niver', 'peso']
-
-        api_response = client.crm.contacts.basic_api.get_page(limit=10, archived=False, properties=propriedades)
+            propriedades_originais = propriedades.copy()
+        
+        api_response = client.crm.contacts.basic_api.get_page(limit=50, archived=False, properties=propriedades)  # limite padrão = 10
 
         propriedades_contatos = []
         for resultado in api_response.results:
-            p_filtradas = { chave: resultado.properties[chave] for chave in propriedades } 
+            p_filtradas = {chave: resultado.properties[chave] for chave in propriedades} 
             propriedades_contatos.append(p_filtradas)
             if contact:
                 for propriedades_contato in propriedades_contatos:
                     if propriedades_contato['email'] == contact:
-                        try:
-                            if propriedades != propriedades_originais:
-                                del propriedades_contato['email']
-                        except:
-                            pass
-                        return propriedades_contato
+                        return propriedades_contato if propriedades == propriedades_originais else {k : v for k, v in propriedades_contato.items() if k != 'email'}
         return propriedades_contatos
+
     except ApiException as e:
         print("Exception when calling basic_api->get_page: %s\n" % e)
         return HTTPException(status_code=500, detail="Erro ao buscar contatos")
