@@ -1,6 +1,6 @@
 from os import getenv
 from pprint import pprint
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from utilidades.models import Contato, ContatoUpdate, db
 import hubspot
 from hubspot.crm.contacts import ApiException, SimplePublicObjectInput
@@ -53,22 +53,23 @@ async def ler_contato(api_key: str = API_KEY, contact: str = None, properties: s
 
 
 @app.post("/crm/v3/objects/contacts/{api_key}")
-async def criar_contato(api_key: str = API_KEY):
+async def criar_contato(api_key: str = API_KEY, request: Request = None):
     client = hubspot.Client.create(api_key=api_key)
 
-    properties = {
-        "email": "gtrg@gmail.com",
-        "telefone": "81 7074-7011",
-        "niver": "2021-12-11",
-        "peso": 11.0  # é em float mesmo?
-    }
+    try:  # lidar melhor com erros depois. usar também o models.py
+        properties = await request.json()
+    except Exception as e:
+        return HTTPException(status_code=400, detail="Erro no JSON")
 
-    simple_public_object_input = SimplePublicObjectInput(properties=properties)
+    todos_contatos = await ler_contato(api_key=api_key)
+    if [contato for contato in todos_contatos if contato['email'] == properties['email']]:
+        # nesse caso, atualizar o contato
+        return HTTPException(status_code=400, detail="Contato já existe")
 
     try:
+        simple_public_object_input = SimplePublicObjectInput(properties=properties)
         api_response = client.crm.contacts.basic_api.create(simple_public_object_input=simple_public_object_input)
         return properties
-
     except ApiException as e:
         print("Exception when calling basic_api->create: %s\n" % e)
         return HTTPException(status_code=500, detail="Erro ao criar contato")
@@ -76,5 +77,5 @@ async def criar_contato(api_key: str = API_KEY):
 
 @app.put("/crm/v3/objects/contacts/{api_key}")
 async def atualizar_contato(api_key: str = API_KEY, contact: str = None):
-    # caso o contact (email) já exista, atualiza. caso não exista, cria com o post acima
+    # caso o contact (email) não exista, cria com o post acima
     pass
