@@ -1,3 +1,4 @@
+from os import getenv
 from fastapi import FastAPI, HTTPException
 from typing import List
 from models import Contato, ContatoUpdate
@@ -20,15 +21,27 @@ db: List[Contato] = [
     ),
 ]
 
+API_KEY = getenv('HUBSPOT_API_KEY')
+
 
 @app.get("/")
 async def root():
     return {"Mensagem": "Olá mundo!"}
 
 
-@app.get("/api/v1/contatos")
-async def fetch_contatos():
-    return db
+@app.get("/crm/v3/objects/contacts")
+async def fetch_contatos(properties: str):
+    import hubspot
+    from pprint import pprint
+    from hubspot.crm.contacts import ApiException
+
+    client = hubspot.Client.create(api_key=API_KEY)
+
+    try:
+        api_response = client.crm.contacts.basic_api.get_page(limit=10, archived=False)
+        pprint(api_response)
+    except ApiException as e:
+        print("Exception when calling basic_api->get_page: %s\n" % e)
 
 
 @app.post("/api/v1/contatos")
