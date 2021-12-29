@@ -30,20 +30,29 @@ async def root():
 
 
 @app.get("/crm/v3/objects/contacts/{api_key}")
-async def fetch_contatos(properties: str, api_key: str = API_KEY):
+async def fetch_contatos(api_key: str = API_KEY, properties: str = None, contact: str = None):
     import hubspot
     from hubspot.crm.contacts import ApiException
 
     client = hubspot.Client.create(api_key=api_key)
 
     try:
-        api_response = client.crm.contacts.basic_api.get_page(limit=10, archived=False, properties=properties.split("-"))
+        if properties:
+            propriedades = properties.split("-")
+            propriedades.append('email')
+        else:
+            propriedades = ['email', 'telefone', 'niver', 'peso']
+
+        api_response = client.crm.contacts.basic_api.get_page(limit=10, archived=False, properties=propriedades)
 
         propriedades_contatos = []
         for resultado in api_response.results:
-            p_filtradas = { chave: resultado.properties[chave] for chave in ["email", "telefone", "peso"] }  # hardcoded e aniversario ta faltando
+            p_filtradas = { chave: resultado.properties[chave] for chave in propriedades } 
             propriedades_contatos.append(p_filtradas)
-
+            if contact:
+                for propriedades_contato in propriedades_contatos:
+                    if propriedades_contato['email'] == contact:
+                        return propriedades_contato
         return propriedades_contatos
     except ApiException as e:
         print("Exception when calling basic_api->get_page: %s\n" % e)
