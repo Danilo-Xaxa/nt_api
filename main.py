@@ -12,8 +12,8 @@ API_KEY = getenv('HUBSPOT_API_KEY')
 
 
 @app.get("/")
-async def root():
-    return {"Mensagem": "Olá mundo!"}
+async def index():
+    return {"Olá!": "Sejam bem-vindos à NT API"}
 
 
 @app.get("/crm/v3/objects/contacts/{api_key}")
@@ -44,7 +44,7 @@ async def ler_contato(api_key: str = API_KEY, contact: str = None, properties: s
                         return propriedades_contato if propriedades == propriedades_originais else {
                             k : v for k, v in propriedades_contato.items() if k != 'email'
                         }
-
+                        
         return propriedades_contatos
 
     except ApiException as e:
@@ -76,6 +76,6 @@ async def criar_contato(api_key: str = API_KEY, request: Request = None):
 
 
 @app.put("/crm/v3/objects/contacts/{api_key}")
-async def atualizar_contato(api_key: str = API_KEY, contact: str = None):
+async def atualizar_contato(api_key: str = API_KEY, contact: str = None, request: Request = None):
     # caso o contact (email) não exista, cria com o post acima
-    pass
+    ...
