@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
 from typing import List
-from models import Contato, ContatoUpdate
 
 
 class Contato(BaseModel):
@@ -10,11 +9,13 @@ class Contato(BaseModel):
     aniversario: str
     peso: float
 
+
 class ContatoUpdate(BaseModel):
     email: Optional[str]
     telefone: Optional[str]
     aniversario: Optional[str]
     peso: Optional[float]
+
 
 db: List[Contato] = [
     Contato(

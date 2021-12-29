@@ -1,5 +1,6 @@
 from os import getenv
 from fastapi import FastAPI, HTTPException
+from utilidades.models import Contato, ContatoUpdate, db
 
 
 app = FastAPI()
@@ -52,7 +53,7 @@ async def ler_contatos(api_key: str = API_KEY, properties: str = None, contact: 
 
 
 @app.post("/crm/v3/objects/contacts/{api_key}")
-async def criar_contato(api_key: str = API_KEY, contact: str = None):
+async def criar_contato(api_key: str = API_KEY, contact: str = 'None'):
     pass
 
 
