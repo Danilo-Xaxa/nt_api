@@ -1,6 +1,9 @@
 from os import getenv
+from pprint import pprint
 from fastapi import FastAPI, HTTPException
 from utilidades.models import Contato, ContatoUpdate, db
+import hubspot
+from hubspot.crm.contacts import ApiException, SimplePublicObjectInput
 
 
 app = FastAPI()
@@ -14,10 +17,7 @@ async def root():
 
 
 @app.get("/crm/v3/objects/contacts/{api_key}")
-async def ler_contatos(api_key: str = API_KEY, properties: str = None, contact: str = None):
-    import hubspot
-    from hubspot.crm.contacts import ApiException
-
+async def ler_contato(api_key: str = API_KEY, contact: str = None, properties: str = None):
     client = hubspot.Client.create(api_key=api_key)
 
     try:
@@ -53,8 +53,24 @@ async def ler_contatos(api_key: str = API_KEY, properties: str = None, contact: 
 
 
 @app.post("/crm/v3/objects/contacts/{api_key}")
-async def criar_contato(api_key: str = API_KEY, contact: str = 'None'):
-    pass
+async def criar_contato(api_key: str = API_KEY, contact: str = None):
+    client = hubspot.Client.create(api_key=API_KEY)
+
+    properties = {
+        "email": "exemplo@gmail.com",
+        "telefone": "81 7070-7070",
+        "niver": "2021-12-29",
+        "peso": 80.0,
+    }
+
+    simple_public_object_input = SimplePublicObjectInput(properties=properties)
+
+    try:
+        api_response = client.crm.contacts.basic_api.create(simple_public_object_input=simple_public_object_input)
+        pprint(api_response)
+
+    except ApiException as e:
+        print("Exception when calling basic_api->create: %s\n" % e)
 
 
 @app.put("/crm/v3/objects/contacts/{api_key}")
