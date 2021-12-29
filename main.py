@@ -39,7 +39,10 @@ async def fetch_contatos(api_key: str = API_KEY, properties: str = None, contact
     try:
         if properties:
             propriedades = properties.split("-")
-            propriedades.append('email')
+            propriedades_originais = propriedades.copy()
+            if contact:
+                if not 'email' in propriedades:
+                    propriedades.append('email')
         else:
             propriedades = ['email', 'telefone', 'niver', 'peso']
 
@@ -52,6 +55,11 @@ async def fetch_contatos(api_key: str = API_KEY, properties: str = None, contact
             if contact:
                 for propriedades_contato in propriedades_contatos:
                     if propriedades_contato['email'] == contact:
+                        try:
+                            if propriedades != propriedades_originais:
+                                del propriedades_contato['email']
+                        except:
+                            pass
                         return propriedades_contato
         return propriedades_contatos
     except ApiException as e:
