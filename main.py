@@ -3,6 +3,7 @@ import hubspot
 from hubspot.crm.contacts import ApiException, SimplePublicObjectInput
 import requests
 from os import getenv
+from pprint import pprint
 
 
 app = FastAPI()
@@ -63,7 +64,9 @@ async def criar_contato(api_key: str = API_KEY, request: Request = None):
     todos_contatos = await ler_contatos(api_key=api_key)
     if [contato for contato in todos_contatos if contato['email'] == properties['email']]:
         if not dict(properties).keys() >= {'email', 'telefone', 'niver', 'peso'}:
-            return HTTPException(status_code=400, detail="Propriedade não informada para criar contato")
+            return HTTPException(status_code=400, detail="Propriedade não informada para alterar contato")
+        elif dict(properties) in todos_contatos:
+            return HTTPException(status_code=400, detail="Contato exatamente igual já existe")
         return await atualizar_contato(api_key=api_key, request=request, contact=dict(properties)['email'])
 
     try:
