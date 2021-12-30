@@ -30,7 +30,7 @@ async def index():
 
 
 @app.get("/crm/v3/objects/contacts/{api_key}")
-async def ler_contatos(api_key: str = API_KEY, contact: str = None, properties: str = None):
+async def ler_contatos(api_key: str, contact: str = None, properties: str = None):
     client = hubspot.Client.create(api_key=api_key)
 
     try:
@@ -66,7 +66,7 @@ async def ler_contatos(api_key: str = API_KEY, contact: str = None, properties: 
 
 
 @app.post("/crm/v3/objects/contacts/{api_key}")
-async def criar_contato(api_key: str = API_KEY, body: Contact = None):
+async def criar_contato(api_key: str, body: Contact):
     client = hubspot.Client.create(api_key=api_key)
 
     try:
@@ -77,7 +77,7 @@ async def criar_contato(api_key: str = API_KEY, body: Contact = None):
 
     todos_contatos = await ler_contatos(api_key=api_key)
     if [contato for contato in todos_contatos if contato['email'] == properties['email']]:
-        if not dict(properties).keys() >= {'email', 'telefone', 'niver', 'peso'}:
+        if not properties.keys() >= {'email', 'telefone', 'niver', 'peso'}:
             return HTTPException(status_code=400, detail="Propriedade não informada para alterar contato")
         return await atualizar_contato(api_key=api_key, body=body, contact=properties['email'])
 
@@ -96,10 +96,7 @@ async def criar_contato(api_key: str = API_KEY, body: Contact = None):
 
 
 @app.put("/crm/v3/objects/contacts/{api_key}/{contact}")
-async def atualizar_contato(api_key: str = API_KEY, contact: str = None, body: UpdateContact = None):
-    if not contact:
-        return HTTPException(status_code=400, detail="Contato não informado")
-
+async def atualizar_contato(api_key: str, contact: str, body: UpdateContact = None):
     client = hubspot.Client.create(api_key=api_key)
 
     try:
@@ -109,9 +106,16 @@ async def atualizar_contato(api_key: str = API_KEY, contact: str = None, body: U
 
     todos_contatos = await ler_contatos(api_key=api_key)
 
-    if not [contato for contato in todos_contatos if contato['email'] == contact]:
-        if not dict(properties).keys() >= {'email', 'telefone', 'niver', 'peso'}:
+    for c in todos_contatos:
+        if c['email'] == contact:
+            contato_antigo = c
+            break
+
+    if 'contato_antigo' not in locals():
+        if not properties.keys() >= {'email', 'telefone', 'niver', 'peso'}:
             return HTTPException(status_code=400, detail="Propriedade não informada para criar contato")
+        elif properties['email'] != contact:
+            return HTTPException(status_code=400, detail="Contato não encontrado")
         return await criar_contato(api_key=api_key, body=body)
 
     properties['peso'] = str(properties['peso'])
@@ -120,6 +124,12 @@ async def atualizar_contato(api_key: str = API_KEY, contact: str = None, body: U
 
     resposta = requests.get(f"https://api.hubapi.com/contacts/v1/contact/emails/batch/?email={contact}&hapikey={api_key}").json()
     contact_id = [*resposta][0]
+
+    if not contact_id:
+        return HTTPException(status_code=400, detail="Contato não encontrado")
+
+    properties = {k: v for k, v in properties.items() if v not in [None, 'None']}
+    properties = {**contato_antigo, **properties}
 
     try:
         properties['peso'] = float(properties['peso'])
