@@ -30,7 +30,7 @@ async def index():
 
 
 @app.get("/crm/v3/objects/contacts/{api_key}")
-async def ler_contatos(api_key: str, contact: str = None, properties: str = None):
+async def ler_contatos(api_key: str, properties: str = None, contact: str = None):
     client = hubspot.Client.create(api_key=api_key)
 
     try:
@@ -96,7 +96,7 @@ async def criar_contato(api_key: str, body: Contact):
 
 
 @app.put("/crm/v3/objects/contacts/{api_key}/{contact}")
-async def atualizar_contato(api_key: str, contact: str, body: UpdateContact = None):
+async def atualizar_contato(api_key: str, body: UpdateContact, contact: str):
     client = hubspot.Client.create(api_key=api_key)
 
     try:
