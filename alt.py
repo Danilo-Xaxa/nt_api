@@ -3,12 +3,26 @@ import hubspot
 from hubspot.crm.contacts import ApiException, SimplePublicObjectInput
 import requests
 from os import getenv
+from pydantic import BaseModel
+from typing import Optional
 
 
 app = FastAPI()
 
 API_KEY = getenv('HUBSPOT_API_KEY')
 
+class Contact(BaseModel):
+    email: str
+    telefone: str
+    niver: str
+    peso: float
+
+class UpdateContact(BaseModel):
+    email: Optional[str] = None
+    telefone: Optional[str] = None
+    niver: Optional[str] = None
+    peso: Optional[float] = None
+    
 
 @app.get("/")
 async def index():
@@ -52,12 +66,13 @@ async def ler_contatos(api_key: str = API_KEY, contact: str = None, properties: 
 
 
 @app.post("/crm/v3/objects/contacts/{api_key}")
-async def criar_contato(api_key: str = API_KEY, request: Request = None):
+async def criar_contato(api_key: str = API_KEY, request: Contact = None):
     client = hubspot.Client.create(api_key=api_key)
 
     try:
-        properties = await request.json()
+        properties = dict(request)
     except Exception as e:
+        print(e)
         return HTTPException(status_code=400, detail="Erro no JSON")
 
     todos_contatos = await ler_contatos(api_key=api_key)
@@ -78,14 +93,14 @@ async def criar_contato(api_key: str = API_KEY, request: Request = None):
 
 
 @app.put("/crm/v3/objects/contacts/{api_key}/{contact}")
-async def atualizar_contato(api_key: str = API_KEY, contact: str = None, request: Request = None):
+async def atualizar_contato(api_key: str = API_KEY, contact: str = None, request: UpdateContact = None):
     if not contact:
         return HTTPException(status_code=400, detail="Contato não informado")
 
     client = hubspot.Client.create(api_key=api_key)
 
     try:
-        properties = await request.json()
+        properties = dict(request)
     except Exception as e:
         return HTTPException(status_code=400, detail="Erro no JSON")
 
