@@ -3,12 +3,26 @@ import hubspot
 from hubspot.crm.contacts import ApiException, SimplePublicObjectInput
 import requests
 from os import getenv
+from pydantic import BaseModel
+from typing import Optional
 
 
 app = FastAPI()
 
 API_KEY = getenv('HUBSPOT_API_KEY')
 
+class Contact(BaseModel):
+    email: str
+    telefone: str
+    niver: str
+    peso: float
+
+class UpdateContact(BaseModel):
+    email: Optional[str] = None
+    telefone: Optional[str] = None
+    niver: Optional[str] = None
+    peso: Optional[float] = None
+    
 
 @app.get("/")
 async def index():
@@ -52,23 +66,27 @@ async def ler_contatos(api_key: str = API_KEY, contact: str = None, properties: 
 
 
 @app.post("/crm/v3/objects/contacts/{api_key}")
-async def criar_contato(api_key: str = API_KEY, request: Request = None):
+async def criar_contato(api_key: str = API_KEY, request: Contact = None):
     client = hubspot.Client.create(api_key=api_key)
 
     try:
-        properties = await request.json()
+        properties = dict(request)
     except Exception as e:
+        print(e)
         return HTTPException(status_code=400, detail="Erro no JSON")
 
     todos_contatos = await ler_contatos(api_key=api_key)
     if [contato for contato in todos_contatos if contato['email'] == properties['email']]:
         if not dict(properties).keys() >= {'email', 'telefone', 'niver', 'peso'}:
             return HTTPException(status_code=400, detail="Propriedade não informada para alterar contato")
-        elif dict(properties) in todos_contatos:
-            return HTTPException(status_code=400, detail="Contato exatamente igual já existe")
-        return await atualizar_contato(api_key=api_key, request=request, contact=dict(properties)['email'])
+        return await atualizar_contato(api_key=api_key, request=request, contact=properties['email'])
+
+    properties['peso'] = str(properties['peso'])
+    if properties in todos_contatos:
+        return HTTPException(status_code=400, detail="Contato exatamente igual já existe")
 
     try:
+        properties['peso'] = float(properties['peso'])
         simple_public_object_input = SimplePublicObjectInput(properties=properties)
         api_response = client.crm.contacts.basic_api.create(simple_public_object_input=simple_public_object_input)
         return properties
@@ -78,14 +96,14 @@ async def criar_contato(api_key: str = API_KEY, request: Request = None):
 
 
 @app.put("/crm/v3/objects/contacts/{api_key}/{contact}")
-async def atualizar_contato(api_key: str = API_KEY, contact: str = None, request: Request = None):
+async def atualizar_contato(api_key: str = API_KEY, contact: str = None, request: UpdateContact = None):
     if not contact:
         return HTTPException(status_code=400, detail="Contato não informado")
 
     client = hubspot.Client.create(api_key=api_key)
 
     try:
-        properties = await request.json()
+        properties = dict(request)
     except Exception as e:
         return HTTPException(status_code=400, detail="Erro no JSON")
 
@@ -96,13 +114,15 @@ async def atualizar_contato(api_key: str = API_KEY, contact: str = None, request
             return HTTPException(status_code=400, detail="Propriedade não informada para criar contato")
         return await criar_contato(api_key=api_key, request=request)
 
+    properties['peso'] = str(properties['peso'])
+    if properties in todos_contatos:
+        return HTTPException(status_code=400, detail="Contato exatamente igual já existe")
+
     resposta = requests.get(f"https://api.hubapi.com/contacts/v1/contact/emails/batch/?email={contact}&hapikey={api_key}").json()
     contact_id = [*resposta][0]
 
-    if dict(properties) in todos_contatos:
-        return HTTPException(status_code=400, detail="Contato exatamente igual já existe")
-
     try:
+        properties['peso'] = float(properties['peso'])
         simple_public_object_input = SimplePublicObjectInput(properties=properties)
         api_response = client.crm.contacts.basic_api.update(contact_id=contact_id, simple_public_object_input=simple_public_object_input)
         return properties
