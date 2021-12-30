@@ -1,10 +1,10 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException
 import hubspot
 from hubspot.crm.contacts import ApiException, SimplePublicObjectInput
 import requests
-from os import getenv
 from pydantic import BaseModel
 from typing import Optional
+from os import getenv
 
 
 app = FastAPI()
@@ -66,11 +66,11 @@ async def ler_contatos(api_key: str = API_KEY, contact: str = None, properties: 
 
 
 @app.post("/crm/v3/objects/contacts/{api_key}")
-async def criar_contato(api_key: str = API_KEY, request: Contact = None):
+async def criar_contato(api_key: str = API_KEY, body: Contact = None):
     client = hubspot.Client.create(api_key=api_key)
 
     try:
-        properties = dict(request)
+        properties = dict(body)
     except Exception as e:
         print(e)
         return HTTPException(status_code=400, detail="Erro no JSON")
@@ -79,7 +79,7 @@ async def criar_contato(api_key: str = API_KEY, request: Contact = None):
     if [contato for contato in todos_contatos if contato['email'] == properties['email']]:
         if not dict(properties).keys() >= {'email', 'telefone', 'niver', 'peso'}:
             return HTTPException(status_code=400, detail="Propriedade não informada para alterar contato")
-        return await atualizar_contato(api_key=api_key, request=request, contact=properties['email'])
+        return await atualizar_contato(api_key=api_key, body=body, contact=properties['email'])
 
     properties['peso'] = str(properties['peso'])
     if properties in todos_contatos:
@@ -96,14 +96,14 @@ async def criar_contato(api_key: str = API_KEY, request: Contact = None):
 
 
 @app.put("/crm/v3/objects/contacts/{api_key}/{contact}")
-async def atualizar_contato(api_key: str = API_KEY, contact: str = None, request: UpdateContact = None):
+async def atualizar_contato(api_key: str = API_KEY, contact: str = None, body: UpdateContact = None):
     if not contact:
         return HTTPException(status_code=400, detail="Contato não informado")
 
     client = hubspot.Client.create(api_key=api_key)
 
     try:
-        properties = dict(request)
+        properties = dict(body)
     except Exception as e:
         return HTTPException(status_code=400, detail="Erro no JSON")
 
@@ -112,7 +112,7 @@ async def atualizar_contato(api_key: str = API_KEY, contact: str = None, request
     if not [contato for contato in todos_contatos if contato['email'] == contact]:
         if not dict(properties).keys() >= {'email', 'telefone', 'niver', 'peso'}:
             return HTTPException(status_code=400, detail="Propriedade não informada para criar contato")
-        return await criar_contato(api_key=api_key, request=request)
+        return await criar_contato(api_key=api_key, body=body)
 
     properties['peso'] = str(properties['peso'])
     if properties in todos_contatos:
