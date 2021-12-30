@@ -1,4 +1,4 @@
-# nt_api
+# NT API
 
 <img src="https://github.com/Danilo-Xaxa/nt_api/blob/main/screenshot.png"/>
 
@@ -37,7 +37,7 @@ Com o servidor rodando, essas são as possibilidades:
     }
 
 - PUT:
-    * http://127.0.0.1:8000/crm/v3/objects/contacts/api_key_aqui/larissa5@gmail.com
+    * http://127.0.0.1:8000/crm/v3/objects/contacts/api_key_aqui/julian@gmail.com
     body: {
         seu json aqui
     }
