@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Form
 import hubspot
 from hubspot.crm.contacts import ApiException, SimplePublicObjectInput
 import requests

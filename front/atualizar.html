@@ -1,6 +1,5 @@
-
 <!doctype html>
-<html lang="en">
+<html lang="pt-br">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -17,10 +16,11 @@
 
     <!-- Custom styles for this template -->
     <link href="signin.css" rel="stylesheet">
+    <script src="script.js"></script>
   </head>
 
   <body class="text-center">
-    <form class="form-signin" >
+    <form class="form-signin" id="form_atualizar" onsubmit="y()">
       <img class="mb-4" src="logo.png" alt="Neuro" width="90" height="90">
       <h1 class="h3 mb-3 font-weight-normal">Atualizar um contato</h1>
 
@@ -31,7 +31,7 @@
       <input type="email" id="email" class="form-control sep" placeholder="E-mail novo" autofocus>
 
       <label for="telefone" class="sr-only">Telefone novo</label>
-      <input type="tel" pattern="[0-9]{2} [0-9]{5}-[0-9]{4}" placeholder="00 00000-0000" id="telefone" class="form-control sep" autofocus>
+      <input type="tel" pattern="[0-9]{2} [0-9]{5}-[0-9]{4}" placeholder="Telefone novo (00 00000-0000)" id="telefone" class="form-control sep" autofocus>
       
       <label for="niver" class="sr-only">Aniversário</label>
       <input type="date" id="niver" class="form-control sep" placeholder="Aniversário novo" autofocus>
@@ -42,5 +42,6 @@
       <button class="btn btn-lg btn-primary btn-block sep" id="botao" type="submit">Atualizar</button>
       <p class="mt-5 mb-3 text-muted" style="margin-top: 20px !important;">Desenvolvido por <a href="https://www.linkedin.com/in/danilo-xaxa" target="_blank" id="xaxa">Danilo Xaxá</a></p>
     </form>
+    <script src="script.js"></script>
   </body>
 </html>

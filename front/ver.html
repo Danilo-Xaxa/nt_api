@@ -20,23 +20,14 @@
   </head>
 
   <body class="text-center">
-    <form class="form-signin" id="form_criar">
+    <form class="form-signin" id="form_ver">
       <img class="mb-4" src="logo.png" alt="Neuro" width="90" height="90">
-      <h1 class="h3 mb-3 font-weight-normal">Criar um contato</h1>
+      <h1 class="h3 mb-3 font-weight-normal">Ver contato(s)</h1>
 
-      <label for="email" class="sr-only">E-mail</label>
-      <input type="email" id="email" class="form-control sep" placeholder="E-mail" required autofocus>
+      <label for="email" class="sr-only">E-mail do contato (opcional)</label>
+      <input type="email" id="email" class="form-control sep" placeholder="E-mail do contato (opcional)" required autofocus>
 
-      <label for="telefone" class="sr-only">Telefone</label>
-      <input type="tel" pattern="[0-9]{2} [0-9]{5}-[0-9]{4}" placeholder="Telefone (00 00000-0000)" id="telefone" class="form-control sep" required autofocus>
-      
-      <label for="niver" class="sr-only">Aniversário</label>
-      <input type="date" id="niver" class="form-control sep" placeholder="Aniversário" required autofocus>
-
-      <label for="peso" class="sr-only">Peso (kg)</label>
-      <input type="number" step=".01" id="peso" class="form-control sep" placeholder="Peso (kg)" min="1" required autofocus>
-
-      <button class="btn btn-lg btn-primary btn-block sep" id="botao" type="submit">Criar</button>
+      <button class="btn btn-lg btn-primary btn-block sep" id="botao" type="submit">Ver</button>
       <p class="mt-5 mb-3 text-muted" style="margin-top: 20px !important;">Desenvolvido por <a href="https://www.linkedin.com/in/danilo-xaxa" target="_blank" id="xaxa">Danilo Xaxá</a></p>
     </form>
     <script src="script.js"></script>
