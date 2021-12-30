@@ -1,4 +1,7 @@
 # nt_api
+
+<img src="https://github.com/Danilo-Xaxa/nt_api/blob/main/screenshot.png"/>
+
 Comecei o projeto estudando o framework FastAPI por [esse vídeo](https://www.youtube.com/watch?v=GN6ICac3OXY) do canal AmigosCode
 
 Depois de entender como uma API Rest pode ser desenvolvida, criei uma conta e um app no [Hubspot](https://www.hubspot.com/)
