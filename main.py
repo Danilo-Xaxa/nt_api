@@ -1,10 +1,8 @@
-from os import getenv
-from pprint import pprint
 from fastapi import FastAPI, HTTPException, Request
-from utilidades.models import Contato, ContatoUpdate, db
 import hubspot
 from hubspot.crm.contacts import ApiException, SimplePublicObjectInput
 import requests
+from os import getenv
 
 
 app = FastAPI()
@@ -64,8 +62,9 @@ async def criar_contato(api_key: str = API_KEY, request: Request = None):
 
     todos_contatos = await ler_contatos(api_key=api_key)
     if [contato for contato in todos_contatos if contato['email'] == properties['email']]:
-        # nesse caso, atualizar o contato
-        return HTTPException(status_code=400, detail="Contato já existe")
+        if not dict(properties).keys() >= {'email', 'telefone', 'niver', 'peso'}:
+            return HTTPException(status_code=400, detail="Propriedade não informada para criar contato")
+        return await atualizar_contato(api_key=api_key, request=request, contact=dict(properties)['email'])
 
     try:
         simple_public_object_input = SimplePublicObjectInput(properties=properties)
@@ -81,8 +80,6 @@ async def atualizar_contato(api_key: str = API_KEY, contact: str = None, request
     if not contact:
         return HTTPException(status_code=400, detail="Contato não informado")
 
-    # caso o contact (email) não exista, cria com o post acima
-
     client = hubspot.Client.create(api_key=api_key)
 
     try:
@@ -93,7 +90,9 @@ async def atualizar_contato(api_key: str = API_KEY, contact: str = None, request
     todos_contatos = await ler_contatos(api_key=api_key)
 
     if not [contato for contato in todos_contatos if contato['email'] == contact]:
-        return HTTPException(status_code=400, detail="Contato não existe")
+        if not dict(properties).keys() >= {'email', 'telefone', 'niver', 'peso'}:
+            return HTTPException(status_code=400, detail="Propriedade não informada para criar contato")
+        return await criar_contato(api_key=api_key, request=request)
 
     resposta = requests.get(f"https://api.hubapi.com/contacts/v1/contact/emails/batch/?email={contact}&hapikey={api_key}").json()
     contact_id = [*resposta][0]
