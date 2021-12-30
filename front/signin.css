@@ -47,3 +47,34 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+body {
+  background-color: #AED9E0 !important;
+}
+
+.sep {
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
+}
+
+#xaxa {
+  color: #1B407A;
+}
+
+#xaxa:hover {
+  color: #CE152F;
+  text-decoration: none;
+}
+
+#botao {
+  background-color: #1B407A !important;
+  border-color: #1B407A !important;
+}
+
+/* 
+#F2F7F2
+#1B407A
+#CE152F
+#002140
+#AED9E0
+*/

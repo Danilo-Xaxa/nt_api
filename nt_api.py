@@ -5,6 +5,7 @@ import requests
 from pydantic import BaseModel
 from typing import Optional
 from os import getenv
+from fastapi.templating import Jinja2Templates
 
 
 app = FastAPI()
