@@ -21,7 +21,7 @@ async def ler_contatos(api_key: str = API_KEY, contact: str = None, properties: 
 
     try:
         if properties:
-            propriedades = properties.split("-")  # precisa ser vírgula?
+            propriedades = properties.split("-")
             propriedades_originais = propriedades.copy()
             if contact and (not 'email' in propriedades):
                 propriedades.append('email')
@@ -29,7 +29,7 @@ async def ler_contatos(api_key: str = API_KEY, contact: str = None, properties: 
             propriedades = ['email', 'telefone', 'niver', 'peso']
             propriedades_originais = propriedades.copy()
         
-        api_response = client.crm.contacts.basic_api.get_page(limit=50, archived=False, properties=propriedades)  # limite padrão = 10
+        api_response = client.crm.contacts.basic_api.get_page(limit=50, archived=False, properties=propriedades)
 
         propriedades_contatos = []
         for resultado in api_response.results:
@@ -55,7 +55,7 @@ async def ler_contatos(api_key: str = API_KEY, contact: str = None, properties: 
 async def criar_contato(api_key: str = API_KEY, request: Request = None):
     client = hubspot.Client.create(api_key=api_key)
 
-    try:  # lidar melhor com erros depois. usar também o models.py
+    try:
         properties = await request.json()
     except Exception as e:
         return HTTPException(status_code=400, detail="Erro no JSON")
