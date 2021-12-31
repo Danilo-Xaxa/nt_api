@@ -20,16 +20,35 @@
   </head>
 
   <body class="text-center">
-    <form class="form-signin" id="form_ver">
+    <form class="form-signin" id="formVer" method="get" onsubmit="return formDataToJSON('formVer');">
       <img class="mb-4" src="logo.png" alt="Neuro" width="90" height="90">
       <h1 class="h3 mb-3 font-weight-normal">Ver contato(s)</h1>
 
+      <div class="form-check form-check-inline">
+        <input name="email" class="form-check-input" type="checkbox" id="emailCB">
+        <label class="form-check-label" for="emailCB">E-mail</label>
+      </div>
+
+      <div class="form-check form-check-inline">
+        <input name="telefone" class="form-check-input" type="checkbox" id="telefoneCB">
+        <label class="form-check-label" for="telefoneCB">Tel</label>
+      </div>
+
+      <div class="form-check form-check-inline">
+        <input name="niver" class="form-check-input" type="checkbox" id="niverCB">
+        <label class="form-check-label" for="niverCB">Niver</label>
+      </div>
+
+      <div class="form-check form-check-inline">
+        <input name="peso" class="form-check-input" type="checkbox" id="pesoCB">
+        <label class="form-check-label" for="pesoCB">Peso</label>
+      </div>
+
       <label for="email" class="sr-only">E-mail do contato (opcional)</label>
-      <input type="email" id="email" class="form-control sep" placeholder="E-mail do contato (opcional)" required autofocus>
+      <input name="contact" type="email" id="email" class="form-control sep" placeholder="E-mail do contato (opcional)" autofocus>
 
       <button class="btn btn-lg btn-primary btn-block sep" id="botao" type="submit">Ver</button>
       <p class="mt-5 mb-3 text-muted" style="margin-top: 20px !important;">Desenvolvido por <a href="https://www.linkedin.com/in/danilo-xaxa" target="_blank" id="xaxa">Danilo Xaxá</a></p>
     </form>
-    <script src="script.js"></script>
   </body>
 </html>

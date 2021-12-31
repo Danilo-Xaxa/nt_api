@@ -1,25 +1,11 @@
-/*
-const formCriar = document.getElementById('form_criar').value
-const formAtualizar = document.getElementById('form_atualizar')
+function formDataToJSON(form) {
+    let formData = new FormData(document.getElementById(form));
+    let obj = {};
+    formData.forEach(function(value, key){
+      obj[key] = value;
+    });
+    let json = JSON.stringify(obj);
 
-var object = {};
-formData.forEach(function(value, key){
-    object[key] = value;
-});
-
-var json = JSON.stringify(object);
-
-console.log(json, typeof(json))
-
-function x() {
-    console.log('a')
-    const formCriar = document.getElementById('form_criar').value
-    console.log(formCriar)
-    const bla = document.getElementById('email').value
-    console.log(bla)
+    console.log(json);
+    return false; // false to cancel form action, true to submit form
 }
-
-function y() {
-
-}
-*/
