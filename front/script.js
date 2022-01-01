@@ -9,23 +9,47 @@ function formDataToJSON() {
 }
 
 
-function setAction(tipo, lista) {
-    const primeiroForm = document.getElementsByTagName('form')[0];
+async function postar(url, body) {
+    const urlFinal = 'http://' + url;
+
+    const axios = require('axios')
+    const qs = require('qs')
+
+    const options = {
+        method: 'POST',
+        headers: { 'content-type': 'application/x-www-form-urlencoded' },
+        data: qs.stringify(body),
+        url: urlFinal
+    }
+
+    axios(options)
+    .then(function(response) {
+        console.log(response.data)
+    })
+    .catch(function(error) {
+        console.log(error)
+    })
+}
+
+
+function setAction(tipo, valores) {
+    const formulario = document.getElementsByTagName('form')[0];
+    const queryParameters = valores.queryParameters ? '?' + valores.queryParameters : '';
+    const apiKey = valores.apiKey;
+    const jsonBody = valores.jsonBody;
     switch (tipo) {
         case 'ver':
-            let queryParameters = lista[0] ? '?' + lista[0] : '';
-            let finalURL = 'localhost:8000/crm/v3/objects/contacts/' + lista[1] + queryParameters
-            return finalURL;
+            let resultado = 'localhost:8000/crm/v3/objects/contacts/' + apiKey + queryParameters
+            return resultado;
             break;
 
         case 'criar':
-            primeiroForm.action = 'localhost:8000/crm/v3/objects/contacts/' + lista[1];
-            // body = lista[0];
+            postar('localhost:8000/crm/v3/objects/contacts/' + apiKey, jsonBody);
             break;
 
         case 'atualizar':
-            primeiroForm.action = 'localhost:8000/crm/v3/objects/contacts/' + lista[1] + lista[2];
-            // body = lista[0];
+            formulario.action = 'localhost:8000/crm/v3/objects/contacts/' + apiKey + valores.contact;
+            // body = jsonBody;
             break;
 
         default:
@@ -35,6 +59,7 @@ function setAction(tipo, lista) {
 
 
 function formatJSON(tipo, json) {
+    const apiKey = json.apiKey;
     switch (tipo) {
         case 'ver':
             let properties = ''
@@ -52,24 +77,34 @@ function formatJSON(tipo, json) {
             if (json.contact) {
                 let contact = 'contact=' + json.contact;
                 let queryParameters = properties ? contact + '&' + properties : contact;
-                return [queryParameters, json.apiKey];
+                return {
+                    queryParameters: queryParameters,
+                    apiKey: apiKey
+                };
             }
             let queryParameters = properties;
-            return [queryParameters, json.apiKey];
+            return {
+                queryParameters: queryParameters,
+                apiKey: apiKey
+            };
             break;
 
         case 'criar':
-            return [json, json.apiKey]; // retorna um objeto para o body
+            delete json.apiKey;
+            return {
+                jsonBody: json,
+                apiKey: apiKey
+            };
             break;
 
         case 'atualizar':
-            let jsonNovo = {}
-            for (let property in json) {
-                if (property in ['email', 'telefone', 'niver', 'peso']) {
-                    jsonNovo[property] = json[property];
-                }
+            let contact = 'contact=' + json.contact;
+            delete json.apiKey;
+            return {
+                jsonBody: json,
+                apiKey: apiKey,
+                contact: contact
             }
-            return [json, json.apiKey, json.contact]
             break;
 
         default:
@@ -80,9 +115,9 @@ function formatJSON(tipo, json) {
 
 
 function linkFinal() {
-    let primeiroForm = document.getElementsByTagName('form')[0];
-    let tipo = primeiroForm.id.split('_')[1];
+    let formulario = document.getElementsByTagName('form')[0];
+    let tipo = formulario.id.split('_')[1];
     let json = formDataToJSON();
-    lista = formatJSON(tipo, json);
-    return 'http://' + setAction(tipo, lista);
+    valores = formatJSON(tipo, json);
+    return 'http://' + setAction(tipo, valores);
 }
