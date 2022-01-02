@@ -1,16 +1,30 @@
-from fastapi import FastAPI, HTTPException, Form
+from fastapi import FastAPI, HTTPException
 import hubspot
 from hubspot.crm.contacts import ApiException, SimplePublicObjectInput
 import requests
 from pydantic import BaseModel
 from typing import Optional
-from os import getenv
-from fastapi.templating import Jinja2Templates
+from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
 
-API_KEY = getenv('HUBSPOT_API_KEY')
+origins = [
+    "http://localhost",
+    "http://127.0.0.1",
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000/",
+    "http://localhost:8000/",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class Contact(BaseModel):
     email: str
