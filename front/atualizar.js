@@ -22,6 +22,7 @@ function linkFinal() {
     const form = document.getElementsByTagName('form')[0];
     let valores = formatJSON(formDataToJSON(form));
     let urlPut = "http://127.0.0.1:8000/crm/v3/objects/contacts/" + valores.apiKey + '/' + valores.jsonBody.contact;
+    let contact = valores.jsonBody.contact;
     delete valores.jsonBody.contact;
     let jsonBody = valores.jsonBody;
 
@@ -40,7 +41,10 @@ function linkFinal() {
 
     setTimeout(function() {
         console.log(content);
-    }, 1000);
+    }, 2000);
 
-    return "http://127.0.0.1:8000/crm/v3/objects/contacts/" + valores.apiKey + '?contact=' + jsonBody.email;
+    if (jsonBody.email) {
+      return "http://127.0.0.1:8000/crm/v3/objects/contacts/" + valores.apiKey + '?contact=' + jsonBody.email;
+    }
+    return "http://127.0.0.1:8000/crm/v3/objects/contacts/" + valores.apiKey + '?contact=' + contact;
 };
