@@ -37,9 +37,5 @@ function linkFinal() {
         var content = await rawResponse.json();
       })();
 
-    setTimeout(function() {
-        console.log(content);
-    }, 10000);
-
     return urlFinal + '?contact=' + jsonBody.email;
 };

@@ -43,9 +43,5 @@ function linkFinal() {
     valores = formatJSON(formDataToJSON(form));
     let queryParameters = valores.queryParameters ? '?' + valores.queryParameters : '';
 
-    setTimeout(function() {
-        console.log('a');
-    }, 10000);
-
-    return 'http://' + '127.0.0.1:8000/crm/v3/objects/contacts/' + valores.apiKey + queryParameters;
+    return "http://127.0.0.1:8000/crm/v3/objects/contacts/" + valores.apiKey + queryParameters;
 }

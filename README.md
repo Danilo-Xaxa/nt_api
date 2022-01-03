@@ -11,17 +11,21 @@ Então, construi a API com três endpoints:
 
 Os três funcionam de forma integrada, a API é capaz de redirecionar para outro endpoint de acordo com os inputs do usuário
 
-Por si só, a API funciona perfeitamente recebendo path/query parameters e/ou inputs JSON (body) e retornando outro JSON (executando algo antes também, se esse for o caso)
+O projeto full-stack já está funcionando. [Esse é o link](https://danilo-xaxa.github.io/nt_api/) para testá-lo. Você precisará ter em mãos sua API Key do Hubspot (você pode entrar em contato comigo para usar a minha, se quiser) e rodar o servidor na porta 8000, utilizando o Uvicorn
 
-Para testar a API sozinha, é necessário instalar o FastAPI e o Uvicorn via pip (Python):
+Para testar o projeto, é necessário instalar antes o FastAPI e o Uvicorn via pip (Python):
 - pip install fastapi
 - pip install uvicorn
 
-Com os arquivos do repositório já baixados, é preciso entrar no diretório certo (/nt_api)
+Com os arquivos deste repositório já baixados (via git clone), é preciso entrar no diretório certo (/nt_api)
 
 Após isso, para rodar o servidor, usa-se o comando "uvicorn nt_api:app". O "nt_api" se refere ao arquivo nt_api.py, que contém a API inteira
 
-Com o servidor rodando na porta 8000, essas são as possibilidades:
+Com o servidor rodando na porta 8000, você pode acessar [essa página](https://danilo-xaxa.github.io/nt_api/) e experimentar a visualização, criação e atualização de contatos no Hubspot
+
+Além disso, a API funciona perfeitamente por si só recebendo path/query parameters e/ou inputs JSON (body) e retornando outro JSON (executando algo antes também, se esse for o caso)
+
+Essas são as possibilidades:
 * GET:
     * padrão: http://127.0.0.1:8000/crm/v3/objects/contacts/{api_key_aqui}
     * com properties: http://127.0.0.1:8000/crm/v3/objects/contacts/{api_key_aqui}?properties=telefone-peso

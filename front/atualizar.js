@@ -44,10 +44,6 @@ function linkFinal() {
         var content = await rawResponse.json();
       })();
 
-    setTimeout(function() {
-        console.log(content);
-    }, 10000);
-
     if (jsonBody.email) {
       return "http://127.0.0.1:8000/crm/v3/objects/contacts/" + valores.apiKey + '?contact=' + jsonBody.email;
     }
