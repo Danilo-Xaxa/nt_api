@@ -21,7 +21,7 @@ function formatJSON(json) {
 function linkFinal() {
     const form = document.getElementsByTagName('form')[0];
     let valores = formatJSON(formDataToJSON(form));
-    let urlPut = "http://127.0.0.1:8000/crm/v3/objects/contacts/" + valores.apiKey + '?contact=' + valores.jsonBody.contact;
+    let urlPut = "http://127.0.0.1:8000/crm/v3/objects/contacts/" + valores.apiKey + '/' + valores.jsonBody.contact;
     delete valores.jsonBody.contact;
     let jsonBody = valores.jsonBody;
 
