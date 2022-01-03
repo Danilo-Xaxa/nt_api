@@ -24,7 +24,7 @@ function linkFinal() {
     let urlFinal = "http://127.0.0.1:8000/crm/v3/objects/contacts/" + valores.apiKey;
     let jsonBody = valores.jsonBody;
 
-    (async () => {
+    async function enviar() {
         const rawResponse = await fetch(urlFinal, {
           method: 'POST',
           mode: 'cors',
@@ -35,7 +35,10 @@ function linkFinal() {
           body: JSON.stringify(jsonBody)
         });
         var content = await rawResponse.json();
-      })();
+      };
 
-    return urlFinal + '?contact=' + jsonBody.email;
+    enviar()
+    .then(() => {
+      return urlFinal + '?contact=' + jsonBody.email;
+    })
 };
