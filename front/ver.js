@@ -1,9 +1,8 @@
-function formDataToJSON() {
-    let formulario = document.getElementsByTagName('form')[0];
-    let formData = new FormData(formulario);
+function formDataToJSON(form) {
+    let formData = new FormData(form);
     let obj = {};
     formData.forEach(function(value, key){
-    obj[key] = value;
+      obj[key] = value;
     });
     return obj;
 }
@@ -40,7 +39,13 @@ function formatJSON(json) {
 
 
 function linkFinal() {
-    valores = formatJSON(formDataToJSON());
+    const form = document.getElementsByTagName('form')[0];
+    valores = formatJSON(formDataToJSON(form));
     let queryParameters = valores.queryParameters ? '?' + valores.queryParameters : '';
+
+    setTimeout(function() {
+        console.log('a');
+    }, 10000);
+
     return 'http://' + '127.0.0.1:8000/crm/v3/objects/contacts/' + valores.apiKey + queryParameters;
 }

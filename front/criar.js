@@ -39,7 +39,7 @@ function linkFinal() {
 
     setTimeout(function() {
         console.log(content);
-    }, 1000);
+    }, 10000);
 
     return urlFinal + '?contact=' + jsonBody.email;
 };
