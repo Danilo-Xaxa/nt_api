@@ -39,6 +39,8 @@ function linkFinal() {
 
     enviar()
     .then(() => {
-      return urlFinal + '?contact=' + jsonBody.email;
+      console.log(content)
     })
+    
+    return urlFinal + '?contact=' + jsonBody.email;
 };

@@ -46,9 +46,12 @@ function linkFinal() {
 
     enviar()
     .then(() => {
-      if (jsonBody.email) {
-        return "http://127.0.0.1:8000/crm/v3/objects/contacts/" + valores.apiKey + '?contact=' + jsonBody.email;
-      }
-      return "http://127.0.0.1:8000/crm/v3/objects/contacts/" + valores.apiKey + '?contact=' + contact;
+      console.log(content)
     })
+
+    if (jsonBody.email) {
+        return "http://127.0.0.1:8000/crm/v3/objects/contacts/" + valores.apiKey + '?contact=' + jsonBody.email;
+    }
+    
+    return "http://127.0.0.1:8000/crm/v3/objects/contacts/" + valores.apiKey + '?contact=' + contact;
 };
