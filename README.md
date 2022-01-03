@@ -1,6 +1,6 @@
 # [NT API](https://danilo-xaxa.github.io/nt_api/)
 
-<img alt="Print do Index" src="https://github.com/Danilo-Xaxa/nt_api/blob/main/screenshot.png"/>
+<img alt="Print do Index" src="https://github.com/Danilo-Xaxa/nt_api/blob/main/front/screenshot.png"/>
 
 Depois de estudar desenvolvimento de APIs Rest com o framework FastAPI, criei uma conta e um app no [Hubspot](https://www.hubspot.com/)
 
