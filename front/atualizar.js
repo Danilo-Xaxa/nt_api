@@ -25,6 +25,11 @@ function linkFinal() {
     let contact = valores.jsonBody.contact;
     delete valores.jsonBody.contact;
     let jsonBody = valores.jsonBody;
+    for (let key in jsonBody) {
+        if (jsonBody[key] === '') {
+            delete jsonBody[key];
+        }
+    }
 
     (async () => {
         const rawResponse = await fetch(urlPut, {
@@ -41,7 +46,7 @@ function linkFinal() {
 
     setTimeout(function() {
         console.log(content);
-    }, 2000);
+    }, 3000);
 
     if (jsonBody.email) {
       return "http://127.0.0.1:8000/crm/v3/objects/contacts/" + valores.apiKey + '?contact=' + jsonBody.email;
