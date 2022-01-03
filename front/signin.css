@@ -71,6 +71,11 @@ body {
   border-color: #1B407A !important;
 }
 
+.botao {
+  background-color: #1B407A !important;
+  border-color: #1B407A !important;
+}
+
 .x {
   display: block !important;
 }
