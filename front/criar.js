@@ -1,5 +1,5 @@
-function formDataToJSON(formulario) {
-    let formData = new FormData(formulario);
+function formDataToJSON(form) {
+    let formData = new FormData(form);
     let obj = {};
     formData.forEach(function(value, key){
       obj[key] = value;
@@ -18,9 +18,9 @@ function formatJSON(json) {
 }
 
 
-function criar() {
-    const formulario = document.getElementsByTagName('form')[0];
-    let valores = formatJSON(formDataToJSON(formulario));
+function linkFinal() {
+    const form = document.getElementsByTagName('form')[0];
+    let valores = formatJSON(formDataToJSON(form));
     let urlFinal = "http://127.0.0.1:8000/crm/v3/objects/contacts/" + valores.apiKey;
     let jsonBody = valores.jsonBody;
 
@@ -34,10 +34,12 @@ function criar() {
           },
           body: JSON.stringify(jsonBody)
         });
-        const content = await rawResponse.json();
-      
-        console.log(content);
+        var content = await rawResponse.json();
       })();
 
-    return false; // ou true? ou nada?
+    setTimeout(function() {
+        console.log(content);
+    }, 1000);
+
+    return urlFinal + '?contact=' + jsonBody.email;
 };
