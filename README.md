@@ -19,7 +19,7 @@ Para testar o projeto, é necessário instalar antes o FastAPI e o Uvicorn via p
 
 Com os arquivos deste repositório já baixados (via git clone), é preciso entrar no diretório certo (/nt_api)
 
-Após isso, para rodar o servidor, usa-se o comando "uvicorn nt_api:app". O "nt_api" se refere ao arquivo nt_api.py, que contém a API inteira
+Após isso, para rodar o servidor, usa-se o comando "uvicorn nt_api:app --reload --port 8000". O "nt_api" se refere ao arquivo nt_api.py, que contém a API inteira
 
 Com o servidor rodando na porta 8000, você pode acessar [essa página](https://danilo-xaxa.github.io/nt_api/) e experimentar a visualização, criação e atualização de contatos no Hubspot
 
